@@ -4,11 +4,7 @@ import { useEffect, useState } from "react";
 import {
   fetchGroupWinnerPrediction,
   type GroupWinnerPredictionData,
-  type GroupSummary,
-  type GroupWinnerRecord,
-  type ThetaInfo,
 } from "@/api/worldcup";
-import { ThetaInfoBlock } from "./ThetaInfoBlock";
 import { GroupSummaryCards } from "./GroupSummaryCards";
 import { RecordsTable } from "./RecordsTable";
 
@@ -26,7 +22,7 @@ export function GroupWinnerScreen() {
 
   if (loading) {
     return (
-      <div className="flex items-center gap-2 py-8 text-gray-500">
+      <div className="flex items-center gap-3 py-8 text-muted">
         <Spinner />
         <span>加载预测数据...</span>
       </div>
@@ -35,7 +31,12 @@ export function GroupWinnerScreen() {
 
   if (error) {
     return (
-      <div className="rounded-lg bg-red-50 p-4 text-red-700">{error}</div>
+      <div
+        className="rounded-xl border border-[var(--danger-border)] bg-[var(--danger-bg)] p-4 text-[var(--danger-text)]"
+        role="alert"
+      >
+        {error}
+      </div>
     );
   }
 
@@ -43,21 +44,16 @@ export function GroupWinnerScreen() {
 
   return (
     <div className="space-y-6">
-      <p className="text-sm text-gray-600">
-        采用 <strong>统一度量 + 简单归一化</strong> 融合多个中间结果，预测各队获得小组第一的概率。
-      </p>
-      {data.edition && (
-        <p className="text-sm font-medium text-gray-700">
-          世界杯 {data.edition}
-        </p>
-      )}
-      <ThetaInfoBlock theta={data.theta} />
       <section>
-        <h4 className="mb-2 font-semibold text-gray-800">各组预测第一</h4>
+        <h4 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted">
+          各组预测第一
+        </h4>
         <GroupSummaryCards summary={data.groups_summary} />
       </section>
       <section>
-        <h4 className="mb-2 font-semibold text-gray-800">详细预测</h4>
+        <h4 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted">
+          详细预测
+        </h4>
         <RecordsTable records={data.records} />
       </section>
     </div>
@@ -67,7 +63,7 @@ export function GroupWinnerScreen() {
 function Spinner() {
   return (
     <div
-      className="h-5 w-5 animate-spin rounded-full border-2 border-gray-300 border-t-green-500"
+      className="h-5 w-5 animate-spin rounded-full border-2 border-border-strong border-t-accent"
       aria-hidden
     />
   );

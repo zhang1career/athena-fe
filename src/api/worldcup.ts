@@ -3,18 +3,16 @@
  * Single module for types and fetch logic - high cohesion.
  */
 
-/**
- * 未设置 NEXT_PUBLIC_API_BASE_URL 时走同源路径 `/api/...`，由 Next.js rewrites 转发到后端
- * （默认目标 `http://127.0.0.1:19001`，见 next.config.ts 的 API_PROXY_TARGET）。
- * 若需浏览器直连后端，在 .env.local 中设置 NEXT_PUBLIC_API_BASE_URL。
- */
-const getBaseUrl = () => {
-  const fromEnv = process.env.NEXT_PUBLIC_API_BASE_URL;
-  if (fromEnv !== undefined && fromEnv.trim() !== "") {
-    return fromEnv.replace(/\/$/, "");
+/** 后端根地址，仅来自环境变量（无尾部斜杠） */
+function getApiBaseUrl(): string {
+  const raw = process.env.NEXT_PUBLIC_API_BASE_URL;
+  if (raw === undefined || String(raw).trim() === "") {
+    throw new Error(
+      "未配置 NEXT_PUBLIC_API_BASE_URL。请在 .env.local 中设置后端地址（参考 .env.example）。"
+    );
   }
-  return "";
-};
+  return String(raw).replace(/\/$/, "");
+}
 
 /** API response wrapper */
 export interface ApiResponse<T> {
@@ -58,8 +56,7 @@ export interface GroupWinnerPredictionData {
 const GROUP_WINNER_ENDPOINT = "/api/v1/worldcup/group-winner-prediction";
 
 export async function fetchGroupWinnerPrediction(): Promise<GroupWinnerPredictionData> {
-  const base = getBaseUrl().replace(/\/$/, "");
-  const url = `${base}${GROUP_WINNER_ENDPOINT}`;
+  const url = `${getApiBaseUrl()}${GROUP_WINNER_ENDPOINT}`;
 
   const res = await fetch(url, { credentials: "omit" });
   const json: ApiResponse<GroupWinnerPredictionData> = await res.json();
