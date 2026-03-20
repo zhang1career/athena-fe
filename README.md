@@ -44,6 +44,31 @@ npm start
 - 设置 `API_BACKEND_URL=http://127.0.0.1:19001`（与后端同机时）作为代理目标
 - 这样用户从任意 IP 访问前端时，请求都经 Next 转发到本机后端，不会出现 127.0.0.1 指向用户电脑的问题
 
+**低配置服务器：静态导出（省内存）**：
+
+```bash
+npm run build:static
+# 产物在 out/ 目录，用 nginx 等静态服务器托管，无需 Node 进程
+```
+
+内存对比：`npm run dev` ~200–500MB，`npm start` ~100–200MB，**静态 + nginx ~10–50MB**。
+
+需在 nginx 中代理 `/api` 到后端，例如：
+
+```nginx
+server {
+    listen 80;
+    root /path/to/athena-fe/out;
+    index index.html;
+    location / {
+        try_files $uri $uri/ $uri.html /index.html;
+    }
+    location /api/ {
+        proxy_pass http://127.0.0.1:19001;
+    }
+}
+```
+
 部署路径：`/apps/worldcup/fe`（通过 `basePath` 配置）
 
 ## 项目结构
