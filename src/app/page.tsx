@@ -5,7 +5,7 @@ export default function Home() {
     <main className="mx-auto max-w-4xl px-4 py-10">
       <header className="mb-8">
         <h1 className="text-3xl font-bold tracking-tight">
-          <span className="bg-linear-to-r from-foreground via-accent to-sky-400 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-foreground via-accent to-sky-400 bg-clip-text text-transparent">
             ⚽ 2026世界杯
           </span>
         </h1>
