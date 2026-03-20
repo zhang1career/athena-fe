@@ -3,13 +3,15 @@
  * Single module for types and fetch logic - high cohesion.
  */
 
-/** 后端根地址，仅来自环境变量（无尾部斜杠） */
+/**
+ * 后端根地址。
+ * - 未设置或为空：使用同源（通过 Next 的 rewrites 代理到后端），适合服务器部署
+ * - 已设置：直接请求该地址，适合本地开发且后端已开 CORS 的场景
+ */
 function getApiBaseUrl(): string {
   const raw = process.env.NEXT_PUBLIC_API_BASE_URL;
   if (raw === undefined || String(raw).trim() === "") {
-    throw new Error(
-      "未配置 NEXT_PUBLIC_API_BASE_URL。请在 .env.local 中设置后端地址（参考 .env.example）。"
-    );
+    return ""; // 同源，由 next.config rewrites 代理
   }
   return String(raw).replace(/\/$/, "");
 }

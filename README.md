@@ -29,7 +29,7 @@ npm run dev
 
 访问：http://localhost:3000（若启用 `basePath` 则为 `/apps/worldcup/fe`）
 
-> **数据来自后端**：先启动 athena，并保证 `NEXT_PUBLIC_API_BASE_URL` 指向该服务。未配置或后端不可达时会报错（如 `Failed to fetch`）。直连跨域需后端允许 CORS。
+> **数据来自后端**：先启动 athena。服务器部署时建议使用代理模式（见下），无需 CORS。
 
 ## 构建与部署
 
@@ -37,6 +37,12 @@ npm run dev
 npm run build
 npm start
 ```
+
+**服务器部署**（解决 "Failed to fetch"）：
+
+- 将 `NEXT_PUBLIC_API_BASE_URL` 留空或注释，前端通过同源 `/api` 请求，由 Next 代理到后端
+- 设置 `API_BACKEND_URL=http://127.0.0.1:19001`（与后端同机时）作为代理目标
+- 这样用户从任意 IP 访问前端时，请求都经 Next 转发到本机后端，不会出现 127.0.0.1 指向用户电脑的问题
 
 部署路径：`/apps/worldcup/fe`（通过 `basePath` 配置）
 

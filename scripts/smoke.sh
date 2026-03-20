@@ -35,9 +35,9 @@ if [ -f "$PID_FILE" ]; then
   rm -f "$PID_FILE"
 fi
 
-# 后台启动：--host 使 Vite 监听 0.0.0.0
+# 后台启动：Next.js 使用 -H/--hostname（非 Vite 的 --host）
 echo "启动服务：APP_NAME=${APP_NAME} 日志=${LOG_FILE}"
-nohup npm run dev -- --host >> "$LOG_FILE" 2>&1 &
+nohup npm run dev -- --hostname 0.0.0.0 >> "$LOG_FILE" 2>&1 &
 echo $! > "$PID_FILE"
 echo "已启动，PID=$(cat $PID_FILE)"
 echo "查看日志: tail -f ${LOG_FILE}"

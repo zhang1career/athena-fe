@@ -6,10 +6,10 @@
     "node": ">=18.18.0"
   },
   "scripts": {
-    "dev": "next dev",
+    "dev": "node -r dotenv/config node_modules/next/dist/bin/next dev",
     "smoke": "bash scripts/smoke.sh",
     "build": "next build",
-    "start": "next start",
+    "start": "node -r dotenv/config node_modules/next/dist/bin/next start",
     "lint": "eslint"
   },
   "dependencies": {
@@ -26,6 +26,7 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.4.20",
+    "dotenv": "^16.6.1",
     "eslint": "^9.16.0",
     "eslint-config-next": "15.5.14",
     "postcss": "^8.4.49",
